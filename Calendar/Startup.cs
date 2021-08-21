@@ -36,6 +36,9 @@ namespace Calendar
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DataBaseConnection")));
 
+            var authOptionalConfigure = Configuration.GetSection("Auth");
+            services.Configure<AuthOption>(authOptionalConfigure);
+
             var authOptional = Configuration.GetSection("Auth").Get<AuthOption>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
