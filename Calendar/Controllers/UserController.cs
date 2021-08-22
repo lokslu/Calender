@@ -4,6 +4,7 @@ using Calendar.EF.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -19,6 +20,7 @@ namespace Calendar.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly ApplicationContext Db;
@@ -32,7 +34,7 @@ namespace Calendar.Controllers
 
         [HttpPost("registration")]
         [AllowAnonymous]
-        public IActionResult Registration([FromBody] UserModel model)
+        async public Task<IActionResult> Registration([FromBody] UserModel model)
         {
 
             var NewUser = new User
@@ -42,12 +44,12 @@ namespace Calendar.Controllers
             };
            
 
-            if (Db.Users.FirstOrDefault(x=>x.Nickname==NewUser.Nickname)==null)
+            if (await Db.Users.FirstOrDefaultAsync(x =>x.Nickname==NewUser.Nickname)==null)
             {
-                Db.Users.Add(NewUser);
-                Db.SaveChanges();
+               await Db.Users.AddAsync(NewUser);
+               await Db.SaveChangesAsync();
 
-                return Login(model);
+                return await Login(model);
             }
             else
             {
@@ -65,7 +67,7 @@ namespace Calendar.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public IActionResult Login([FromBody] UserModel model)
+        async public Task<IActionResult> Login([FromBody] UserModel model)
         {
 
             var identity = GetIdentity(model.Nickname, HeshPassword(model.Password));
@@ -97,7 +99,7 @@ namespace Calendar.Controllers
             return Ok(new { token = encodedJwt });
         }
 
-        [HttpPost("deleteuser")]
+        [HttpDelete("delete")]
         async public Task<IActionResult> DeleteUser()
         {
             var Userid = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == "Id").Value);
