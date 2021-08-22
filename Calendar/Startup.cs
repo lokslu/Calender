@@ -68,7 +68,7 @@ namespace Calendar
                     };
                 });
 
-            //services.AddAuthorization();
+            services.AddAuthorization();
 
             services.AddCors();
 
