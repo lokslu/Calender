@@ -22,6 +22,7 @@ namespace Calendar.Controllers
         public EventController(ApplicationContext Db)
         {
             this.Db = Db;
+
         }
 
         [HttpGet("getall")]
