@@ -24,6 +24,23 @@ namespace Calendar.Controllers
             this.Db = Db;
         }
 
+        [HttpGet("getall")]
+        public IActionResult All()
+        {
+            var Userid = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value);
+
+            List<EventModel> events = Db.Events.Where(x => x.OwnerId == Userid)
+                .Select(s => new EventModel() 
+                {
+                    Id=s.Id,
+                    Data=s.Data,
+                    Time=s.Time
+                })
+                .ToList();
+            
+            return Ok(events);
+        }
+
         [HttpPost("add")]
         async public Task<IActionResult> AddEvent([FromBody] EventModel NewEventModel)
         {
@@ -44,9 +61,10 @@ namespace Calendar.Controllers
         async public Task<IActionResult> UpdateEvent([FromBody] EventModel UpdateEventModel)
         {
             var Userid = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value);
-         
+
             Event UpdateEvent = new Event()
             {
+                Id = UpdateEventModel.Id,
                 Time = UpdateEventModel.Time,
                 Data = UpdateEventModel.Data,
                 OwnerId = Userid
