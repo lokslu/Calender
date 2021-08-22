@@ -55,6 +55,14 @@ namespace Calendar.Controllers
             }
         }
 
+        [HttpPost("cheknickname")]
+        [AllowAnonymous]
+        async public Task<IActionResult> CheckNewNickname([FromBody] String newNickname)
+        {
+            bool state = !await Db.Users.AnyAsync(x => x.Nickname == newNickname);
+            return Ok(new { original = state });
+        }
+
         [HttpPost("login")]
         [AllowAnonymous]
         public IActionResult Login([FromBody] UserModel model)
