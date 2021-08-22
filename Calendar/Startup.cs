@@ -49,6 +49,11 @@ namespace Calendar
                         // укзывает, будет ли валидироваться издатель при валидации токена
                         ValidateIssuer = true,
 
+                        // будет ли валидироваться потребитель токена
+                        ValidateAudience = true,
+                        // установка потребителя токена
+                        ValidAudience = authOptional.Audience,
+
                         // строка, представляющая издателя
                         ValidIssuer = authOptional.Issuer,
 

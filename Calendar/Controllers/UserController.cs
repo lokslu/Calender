@@ -83,6 +83,7 @@ namespace Calendar.Controllers
 
             var jwt = new JwtSecurityToken(
                     issuer: authOptions.Issuer,
+                    audience: authOptions.Audience,
                     notBefore: now,
                     claims: identity.Claims,
                     expires: now.Add(TimeSpan.FromHours(authOptions.TokenLifetime)),
