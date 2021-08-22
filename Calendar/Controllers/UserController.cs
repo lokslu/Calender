@@ -92,8 +92,19 @@ namespace Calendar.Controllers
 
             // сериализация ответа
             Response.ContentType = "application/json";
+
             Console.WriteLine("Login succeed");
             return Ok(new { token = encodedJwt });
+        }
+
+        [HttpPost("deleteuser")]
+        async public Task<IActionResult> DeleteUser()
+        {
+            var Userid = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == "Id").Value);
+            var DeleteвUser = await Db.Users.FirstOrDefaultAsync(x => x.Id == Userid);
+            Db.Entry(DeleteвUser).State= EntityState.Deleted;
+            await Db.SaveChangesAsync();
+            return Ok();
         }
 
         private ClaimsIdentity GetIdentity(string nickname, string password)// тип ClaimsIdentity
