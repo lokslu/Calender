@@ -63,7 +63,9 @@ namespace Calendar
                     };
                 });
 
-            services.AddAuthorization();
+            //services.AddAuthorization();
+
+            services.AddCors();
 
             services.AddSwaggerGen(c =>
             {
@@ -83,6 +85,8 @@ namespace Calendar
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -7,6 +7,7 @@ namespace Calendar.Models
 {
     public class EventModel
     {
+        public Guid Id { get; set; }
         public DateTime Time { get; set; }
         public string Data { get; set; }
     }
