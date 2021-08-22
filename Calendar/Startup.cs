@@ -50,7 +50,7 @@ namespace Calendar
                         ValidateIssuer = true,
 
                         // будет ли валидироваться потребитель токена
-                        ValidateAudience = true,
+                        ValidateAudience = false,
                         // установка потребителя токена
                         ValidAudience = authOptional.Audience,
 
