@@ -54,7 +54,7 @@ namespace Calendar.Controllers
             };
             await Db.Events.AddAsync(NewEvent);
             await Db.SaveChangesAsync();
-            return Ok();
+            return Ok(NewEvent.Id);
         }
 
         [HttpPut("update")]
@@ -75,12 +75,19 @@ namespace Calendar.Controllers
         }
 
         [HttpDelete("delete")]
-        async public Task<IActionResult> DeleteEvent([FromBody] Guid EventId)
+        async public Task<IActionResult> DeleteEvent([FromQuery] Guid EventId)
         {
             var DeletedEvent= await Db.Events.FirstOrDefaultAsync(x => x.Id == EventId);
-            Db.Entry(DeletedEvent).State = EntityState.Deleted;
-            await Db.SaveChangesAsync();
-            return Ok();
+            if (DeletedEvent != null)
+            {
+                Db.Entry(DeletedEvent).State = EntityState.Deleted;
+                await Db.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();   
+            }
         }
     }
 }
