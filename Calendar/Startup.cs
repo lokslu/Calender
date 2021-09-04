@@ -41,6 +41,14 @@ namespace Calendar
 
             var authOptional = Configuration.GetSection("Auth").Get<AuthOption>();
 
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                //options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                //убирает при сериализации переобразование в camelCase
+                //оставляет свойства в ОРИГИНАЛЕ
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
