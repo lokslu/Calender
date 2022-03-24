@@ -18,8 +18,7 @@ namespace Calendar.EF
             // Database.EnsureDeleted();   // удаляем бд со старой схемой
 
             if (!Database.CanConnect())
-            {
-                Database.EnsureCreated();   // создаем бд с новой схемой
+            {                Database.EnsureCreated();   // создаем бд с новой схемой
             }
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

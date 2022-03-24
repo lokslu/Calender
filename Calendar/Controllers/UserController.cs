@@ -36,20 +36,17 @@ namespace Calendar.Controllers
         [AllowAnonymous]
         async public Task<IActionResult> Registration([FromBody] UserModel model)
         {
-
             var NewUser = new User
             {
                 Password = HeshPassword(model.Password),
                 Nickname = model.Nickname,
             };
-           
 
             if (await Db.Users.FirstOrDefaultAsync(x =>x.Nickname==NewUser.Nickname)==null)
             {
                await Db.Users.AddAsync(NewUser);
                await Db.SaveChangesAsync();
-
-                return await Login(model);
+               return await Login(model);
             }
             else
             {
@@ -69,9 +66,7 @@ namespace Calendar.Controllers
         [AllowAnonymous]
         async public Task<IActionResult> Login([FromBody] UserModel model)
         {
-
             var identity = GetIdentity(model.Nickname, HeshPassword(model.Password));
-
             if (identity == null)
             {
                 return Unauthorized();
@@ -89,7 +84,6 @@ namespace Calendar.Controllers
                     signingCredentials: new SigningCredentials(authOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
 
             // сериализация ответа
             Response.ContentType = "application/json";
